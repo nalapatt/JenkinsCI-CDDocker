@@ -26,13 +26,16 @@ Create master and slave EC2 instances in AWS
 # Configure Master 
 configure jenkins and docker in jenkins server
 - Install docker in jenkins server
-- sudo apt-get update sudo apt install docker.io docker --version
+- sudo apt-get update 
+- sudo apt install docker.io 
+- docker --version
 
 - start docker in jenkins
 - sudo service docker start
 
 # install jenkins and jdk in jenkins
-- sudo apt install openjdk-8* sudo wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+- sudo apt install openjdk-8* 
+- sudo wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
 -  sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ >
 /etc/apt/sources.list.d/jenkins.list' 
 - sudo apt-get update 
@@ -44,20 +47,21 @@ configure jenkins and docker in jenkins server
 -  sudo service docker start
 
 # configure ansible in ansible ec2 instance
-- nstall ansible in master to deploy container in slave server
 - sudo apt-get update 
 - sudo apt-get install software-properties-common 
 - sudo apt-add-repository ppa:ansible/ansible 
 - sudo apt-get update
 -  sudo apt-get install ansible 
--  ansible --version (get the executable location /usr/bin/ansible , this will be used in the UI as /usr/bin/)
--  
+-  ansible --version (get the executable location /usr/bin/ansible ,
+-   this will be used in the UI as /usr/bin/)
+
 
 # change hosts and permissions
-sudo vi /etc/ansible/hosts 
+- sudo vi /etc/ansible/hosts 
+- add 
 -  54.164.166.210
 
-sudo vi /etc/ssh/sshd_config ( if you want to use password)
+- sudo vi /etc/ssh/sshd_config ( if you want to use password)
 - change #PermitRootLogin prohibit-password to Permitrootlogin yes
 - change #passwordauthentication no to passwordauthentication yes esc :wq
 - systemctl restart sshd
@@ -76,7 +80,7 @@ sudo vi /etc/ssh/sshd_config ( if you want to use password)
 -  start using jenkins
 
 # manage plugins
-make sure 
+
 - ansible plugin is installed 
 - ssh plugin
 -  ssh agent 
@@ -87,7 +91,7 @@ make sure
 - install without restart
 
 # set up user in container server
-in deploy server set up user
+
 - sudo su - 
 - adduser deploy
 -  passwd
@@ -101,7 +105,10 @@ in deploy server set up user
 -  go to add ssh remote hosts 
 -  hostname - pvt ip address of deploy node
 -   port 22
--    add jenkins credentials username with password username - deploy (the deploy server username you set up ) 
+-    add jenkins 
+-    credentials
+-     username with password 
+-     username - deploy (the deploy server username you set up ) 
 -    password - welcome123 ( the password that you gave for that user) 
 -    id - deploy 
 -    description - deploy 
