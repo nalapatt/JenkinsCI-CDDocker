@@ -59,7 +59,7 @@ configure jenkins and docker in jenkins server
 # change hosts and permissions
 - sudo vi /etc/ansible/hosts 
 - add 
--  54.164.166.210
+-  54.164.166.210 ( change to ip address of deploy node, ip r to get the address)
 
 - sudo vi /etc/ssh/sshd_config ( if you want to use password)
 - change #PermitRootLogin prohibit-password to Permitrootlogin yes
@@ -101,13 +101,12 @@ check in available plugins
 - wget https://downloads.apache.org/tomcat/tomcat-8/v8.5.66/bin/apache-tomcat-8.5.66.tar.gz 
 - tar -xvzf apache-tomcat-8.5.66.tar.gz (the gz file)
 - mv apache-tomcat-8.5.66 tomcat
-- cd tomcat
-- cd conf 
+- cd tomcat/conf
 - vi server.xml
 - change 8080 port to 8090
 - cd ../bin
 - ./startup.sh
-- ipaddress:8090 
+- public ipaddress of node:8090 
 - you should see the tomcat server 
 - click manager app 
 - you will see an error message
