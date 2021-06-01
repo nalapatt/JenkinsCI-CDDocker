@@ -91,10 +91,30 @@ check in available plugins
 -  ssh connection 
 - install without restart
 
+# set up container server
+# Install docker 
+- sudo apt-get update 
+- sudo apt install docker.io 
+- docker --version
+
+# start docker 
+- sudo service docker start
+
+# install jenkins and jdk in jenkins
+- sudo apt-get update 
+- sudo apt install openjdk-8* 
+
+# give user docker permissions
+- sudo usermod -a -G docker deploy
+-  sudo service docker start
+
+# install tomcat in deploy server
+
+  
 # set up user in container server
 
 - sudo su - 
-- adduser deploy
+- adduser deploy ( will say already exists)
 -  passwd
 -  welcome123 (remember this password) enter for all and press Y for correct again please remember your username and password
 - sudo vi /etc/ssh/sshd_config ( if you want to use password)
