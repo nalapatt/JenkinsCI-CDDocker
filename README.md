@@ -96,6 +96,10 @@ check in available plugins
 - sudo apt-get update 
 - sudo apt install openjdk-8*
 - sudo su - 
+- adduser tomcat
+- passwd
+- enter password (remember this )
+- su - tomcat
 # go to the tomcat server UI 
 - tomcat 8 tar.gz right click copy link address ( https://downloads.apache.org/tomcat/tomcat-8/v8.5.66/bin/apache-tomcat-8.5.66.tar.gz) 
 - wget https://downloads.apache.org/tomcat/tomcat-8/v8.5.66/bin/apache-tomcat-8.5.66.tar.gz 
@@ -111,6 +115,7 @@ check in available plugins
 - click manager app 
 - you will see an error message
 - go back to the terminal
+- exit 
 - find / -name context.xml 
 - it shows locations of the files with that name
 ( for example for me i got
@@ -138,26 +143,18 @@ so i did
 - this was found only in the 2nd and 4th file)
 - esc :wq
 - after that save and quit ! esc :wq
-
+- su - tomcat
 - cd ../conf
 - vi tomcat-users.xml
 - go to the role section and add
-- press i
-- <role rolename="manager-gui"/>
-- <user username="tomcat" password="s3cret" roles="manager-gui"/>
-
-- <role rolename="manager-script"/>
-- <user username="deployer" password="deployer" roles="manager-script"/>
-
-# or 
-
+- 
 <role rolename="tomcat"/>
   <role rolename="manager-gui"/>
   <role rolename="admin-gui"/>
   <role rolename="manager-script"/>
   <user username="admin" password="admin" roles="tomcat,manager-gui,admin-gui,manager-script"/>
 - save esc :wq
-- manager app sign in with tomcat and s3cret you are signed in
+- manager app sign in with admin and admin you are signed in
 
 - go to the tomcat UI manager app should show a sign in
 - yeah done
@@ -221,12 +218,14 @@ so i did
 -  now you will see id_rsa.pub and id_rsa keys
 
 # copy the public key to the hosts server
-- ssh-copy-id -i id_rsa.pub deploy@172.31.23.115 
+- ssh-copy-id -i id_rsa.pub deploy@172.31.23.115 ( to copy to the deploy server)
+- ssh-copy-id -i id_rsa.pub tomcat@172.31.23.115 ( to copy the tomcat server)
 - ( to copy the files to the deploy server change it to your deploy pvt ip address ) 
 - press yes enter password welcome123 key will be added
 
 # check if you can ssh to the host
 - ssh -i id_rsa deploy@172.31.23.115 ( to see if you can log in to the server change it your deploy nodes pvt ip address)
+- ssh -i id_rsa tomcat@172.31.23.115 ( to see if you can log in to the server change it your tomcat nodes pvt ip address)
 
 # yeah if you did !!
 # now you can check if the authorized_keys exist in the .ssh folder here 
@@ -252,7 +251,17 @@ so i did
 -       cd .ssh
 -        cat id_rsa (get the private key copy and paste in the UI )
 -        ok
-
+-   id tomcat-server
+-    description tomcat-server
+-     username tomcat 
+-     private key enter directly 
+-     add
+-      go back to the terminal 
+-      sudo su - 
+-      su - jenkins
+-       cd .ssh
+-        cat id_rsa (get the private key copy and paste in the UI )
+-        ok
 # add credentials for github
 - add credentials 
 - username with password 
@@ -270,58 +279,14 @@ so i did
 # Create a new pipeline project
 - new item pipeline
 - add pipeline script
-- Copy 
-- pipeline{
-    agent any
-    tools {
-      maven 'mymaven'
-    }
-    environment {
-      DOCKER_TAG = 2.0
-    }
-    stages{
-        stage('SCM'){
-            steps{
-                git credentialsId: 'github', 
-                    url: 'https://github.com/nalapatt/dockeransiblejenkins'
-            }
-        }
-        
-        stage('Maven Build'){
-            steps{
-                sh "mvn clean package"
-            }
-        }
-        
-        stage('Docker Build'){
-            steps{
-                sh "docker build . -t nalapatt123/hariapp:${DOCKER_TAG} "
-            }
-        }
-        
-        stage('DockerHub Push'){
-            steps{
-                withCredentials([string(credentialsId: 'docker-hub', variable: 'dockerHubPwd')]) {
-                    sh "docker login -u nalapatt123 -p ${dockerHubPwd}"
-                }
-                
-                sh "docker push nalapatt123/hariapp:${DOCKER_TAG} "
-            }
-        }
-     
-        stage('Docker Deploy'){
-            steps{
-                sshagent(['dev_server']) {
-                     sh 'ssh -o StrictHostKeyChecking=no deploy@172.31.26.33 "docker run -p 8080:8080 -d --name my-app nalapatt123/hariapp:${DOCKER_TAG}"'
-                }
-                  }
-        }
-    }
-}
+
 - Poll SCM ( H/5* * * * )every 5 mins for new commit
 - Build now
 - If all the stages are done then success
-- check public ip for index.html 
+- check public ip:8090/dockeransible
+- should show the index.html
 - commit github changes and check if there is a new build
 - check the html again
-- 
+
+YEAH PIPELINE DONE
+
