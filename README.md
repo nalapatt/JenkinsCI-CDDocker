@@ -102,9 +102,12 @@ check in available plugins
 - tar -xvzf apache-tomcat-8.5.66.tar.gz (the gz file)
 - mv apache-tomcat-8.5.66 tomcat
 - cd tomcat
-- cd bin 
+- cd conf 
+- vi server.xml
+- change 8080 port to 8090
+- cd ../bin
 - ./startup.sh
-- ipaddress:8080 
+- ipaddress:8090 
 - you should see the tomcat server 
 - click manager app 
 - you will see an error message
@@ -134,10 +137,10 @@ vi /root/tomcat/webapps/host-manager/META-INF/context.xml
 - esc :wq
 - after that save and quit ! esc :wq
 
-- cd ../
-- cd conf
+- cd ../conf
 - vi tomcat-users.xml
 - go to the role section and add
+- press i
 - <role rolename="manager-gui"/>
 - <user username="tomcat" password="s3cret" roles="manager-gui"/>
 
