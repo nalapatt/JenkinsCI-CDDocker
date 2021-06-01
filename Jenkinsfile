@@ -22,7 +22,10 @@ pipeline{
         
         stage('Docker Build'){
             steps{
-                sh "docker build . -t nalapatt123/hariapp:${DOCKER_TAG} "
+                sshagent(['dev_slave']) {
+                     sh "docker build . -t nalapatt123/hariapp:${DOCKER_TAG} "
+                     sh "scp -o StrictHostKeyChecking=no target/*.war deploy@172.31.31.200:/opt/tomcat8/webapps/"
+                }
             }
         }
         
