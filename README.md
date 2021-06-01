@@ -92,7 +92,66 @@ check in available plugins
 - install without restart
 
 # set up container server
+# configure tomcat 
+- sudo apt-get update 
+- sudo apt install openjdk-8*
+- sudo su - 
+# go to the tomcat server UI 
+- tomcat 8 tar.gz right click copy link address ( https://downloads.apache.org/tomcat/tomcat-8/v8.5.66/bin/apache-tomcat-8.5.66.tar.gz) 
+- wget https://downloads.apache.org/tomcat/tomcat-8/v8.5.66/bin/apache-tomcat-8.5.66.tar.gz 
+- tar -xvzf apache-tomcat-8.5.66.tar.gz (the gz file)
+- mv apache-tomcat-8.5.66 tomcat
+- cd tomcat
+- cd bin 
+- ./startup.sh
+- ipaddress:8080 
+- you should see the tomcat server 
+- click manager app 
+- you will see an error message
+- go back to the terminal
+- find / -name context.xml 
+- it shows locations of the files with that name
+( for example for me i got
+/root/tomcat/conf/context.xml
+/root/tomcat/webapps/manager/META-INF/context.xml
+/root/tomcat/webapps/examples/META-INF/context.xml
+/root/tomcat/webapps/host-manager/META-INF/context.xml
+)
+so i did
+( vi /root/tomcat/conf/context.xml
+vi /root/tomcat/webapps/manager/META-INF/context.xml
+vi /root/tomcat/webapps/examples/META-INF/context.xml
+vi /root/tomcat/webapps/host-manager/META-INF/context.xml
+)
+- cd to all the  directories mentioned here one by one 
+- if you see a valve line comment it out
+- vi context.xml
+- comment the lines
+-  <!--   <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /> -->!
+- so <!--  in the beginning and in the end  -->!
+- i found this only in the 2nd and 4th file)
+- esc :wq
+- after that save and quit ! esc :wq
+
+- cd ../
+- cd conf
+- vi tomcat-users.xml
+- go to the role section and add
+- <role rolename="manager-gui"/>
+- <user username="tomcat" password="s3cret" roles="manager-gui"/>
+
+- <role rolename="manager-script"/>
+- <user username="deployer" password="deployer" roles="manager-script"/>
+
+- save esc :wq
+- manager app sign in with tomcat and s3cret you are signed in
+
+- go to the tomcat UI manager app should show a sign in
+- yeah done
+
 # Install docker 
+- exit
 - sudo apt-get update 
 - sudo apt install docker.io 
 - docker --version
@@ -103,24 +162,21 @@ check in available plugins
 # install jenkins and jdk in jenkins
 - sudo apt-get update 
 - sudo apt install openjdk-8* 
-
-# give user docker permissions
-- sudo usermod -a -G docker deploy
--  sudo service docker start
-
-# install tomcat in deploy server
-
   
 # set up user in container server
 
 - sudo su - 
-- adduser deploy ( will say already exists)
+- adduser deploy 
 -  passwd
 -  welcome123 (remember this password) enter for all and press Y for correct again please remember your username and password
 - sudo vi /etc/ssh/sshd_config ( if you want to use password)
 - change #PermitRootLogin prohibit-password to Permitrootlogin yes
 - change #passwordauthentication no to passwordauthentication yes esc :wq
 - sudo systemctl restart sshd
+# give user docker permissions
+- sudo usermod -a -G docker deploy
+-  sudo service docker start
+
 # in jenkins UI set up config to accept password and hosts file to configure hosts
 - configure system to check ssh connection with password
 -  select configure system
