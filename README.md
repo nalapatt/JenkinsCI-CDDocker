@@ -25,19 +25,19 @@ Create master and slave EC2 instances in AWS
 
 # Configure Master 
 configure jenkins and docker in jenkins server
-- Install docker in jenkins server
+# Install docker in jenkins server
 - sudo apt-get update 
 - sudo apt install docker.io 
 - docker --version
 
-- start docker in jenkins
+# start docker in jenkins
 - sudo service docker start
 
 # install jenkins and jdk in jenkins
+- sudo apt-get update 
 - sudo apt install openjdk-8* 
 - sudo wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
--  sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ >
-/etc/apt/sources.list.d/jenkins.list' 
+-  sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list' 
 - sudo apt-get update 
 - sudo apt-get install jenkins
 
@@ -64,7 +64,7 @@ configure jenkins and docker in jenkins server
 - sudo vi /etc/ssh/sshd_config ( if you want to use password)
 - change #PermitRootLogin prohibit-password to Permitrootlogin yes
 - change #passwordauthentication no to passwordauthentication yes esc :wq
-- systemctl restart sshd
+- sudo systemctl restart sshd
 
 # login to the jenkins UI
 - jenkins UIipaddressofjenkins:8080 in browser (example:ec2-52-207-250-4.compute-1.amazonaws.com:8080)
@@ -80,8 +80,9 @@ configure jenkins and docker in jenkins server
 -  start using jenkins
 
 # manage plugins
-
-- ansible plugin is installed 
+# make sure these are installed
+check in available plugins
+- ansible plugin
 - ssh plugin
 -  ssh agent 
 -  ssh build agent
@@ -95,15 +96,16 @@ configure jenkins and docker in jenkins server
 - sudo su - 
 - adduser deploy
 -  passwd
--  welcome123 (remember this password) enter for all and press Y for correct remember your username and password
-
+-  welcome123 (remember this password) enter for all and press Y for correct again please remember your username and password
+- sudo vi /etc/ssh/sshd_config ( if you want to use password)
+- change #PermitRootLogin prohibit-password to Permitrootlogin yes
+- change #passwordauthentication no to passwordauthentication yes esc :wq
+- sudo systemctl restart sshd
 # in jenkins UI set up config to accept password and hosts file to configure hosts
-- configure UI to set up password credentials
-- check ssh connection with password
-- select manage jenkins 
-- configure system
+- configure system to check ssh connection with password
+-  select configure system
 -  go to add ssh remote hosts 
--  hostname - pvt ip address of deploy node
+-  hostname - pvt ip address of deploy node ( you can get this with ip r)
 -   port 22
 -    add jenkins 
 -    credentials
@@ -121,7 +123,8 @@ configure jenkins and docker in jenkins server
 # from jenkins user ssh keygen
 - sudo su - 
 - adduser jenkins ( already exists) 
-- passwd give new password -welcome123 
+- passwd 
+- give new password (for example welcome123)
 - su - jenkins
 
 # generate ssh keys
@@ -130,13 +133,16 @@ configure jenkins and docker in jenkins server
 -  now you will see id_rsa.pub and id_rsa keys
 
 # copy the public key to the hosts server
-- ssh-copy-id -i id_rsa.pub deploy@172.31.23.115 ( to copy the files to the deploy server) press yes enter password welcome123 key will be added
+- ssh-copy-id -i id_rsa.pub deploy@172.31.23.115 
+- ( to copy the files to the deploy server change it to your deploy pvt ip address ) 
+- press yes enter password welcome123 key will be added
 
 # check if you can ssh to the host
-- ssh -i id_rsa deploy@172.31.23.115 ( to see if you can log in to the server)
+- ssh -i id_rsa deploy@172.31.23.115 ( to see if you can log in to the server change it your deploy nodes pvt ip address)
 
 # yeah if you did !!
 # now you can check if the authorized_keys exist in the .ssh folder here 
+- cd .ssh
 - ls
 - exit (to go back to the jenkins server VM) 
 
@@ -156,7 +162,7 @@ configure jenkins and docker in jenkins server
 -      sudo su - 
 -      su - jenkins
 -       cd .ssh
--        cat id_rsa get the private key copy and paste in the UI 
+-        cat id_rsa (get the private key copy and paste in the UI )
 -        ok
 
 # add credentials for github
