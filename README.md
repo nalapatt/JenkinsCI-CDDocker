@@ -114,16 +114,16 @@ check in available plugins
 - find / -name context.xml 
 - it shows locations of the files with that name
 ( for example for me i got
-/root/tomcat/conf/context.xml
-/root/tomcat/webapps/manager/META-INF/context.xml
-/root/tomcat/webapps/examples/META-INF/context.xml
-/root/tomcat/webapps/host-manager/META-INF/context.xml
+- /root/tomcat/conf/context.xml
+- /root/tomcat/webapps/manager/META-INF/context.xml
+- /root/tomcat/webapps/examples/META-INF/context.xml
+- /root/tomcat/webapps/host-manager/META-INF/context.xml
 )
 so i did
-( vi /root/tomcat/conf/context.xml
-vi /root/tomcat/webapps/manager/META-INF/context.xml
-vi /root/tomcat/webapps/examples/META-INF/context.xml
-vi /root/tomcat/webapps/host-manager/META-INF/context.xml
+- ( vi /root/tomcat/conf/context.xml
+- vi /root/tomcat/webapps/manager/META-INF/context.xml
+- vi /root/tomcat/webapps/examples/META-INF/context.xml
+- vi /root/tomcat/webapps/host-manager/META-INF/context.xml
 )
 - cd to all the  directories mentioned here one by one 
 - if you see a valve line comment it out
@@ -131,8 +131,11 @@ vi /root/tomcat/webapps/host-manager/META-INF/context.xml
 - comment the lines
 -  <!--   <Valve className="org.apache.catalina.valves.RemoteAddrValve"
          allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /> -->!
-- so <!--  in the beginning and in the end  -->!
-- i found this only in the 2nd and 4th file)
+- so '<!-- '
+-  in the beginning 
+-  and in the end 
+-  ' -->!'
+- this was found only in the 2nd and 4th file)
 - esc :wq
 - after that save and quit ! esc :wq
 
