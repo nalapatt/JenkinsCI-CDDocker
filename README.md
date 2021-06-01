@@ -149,6 +149,13 @@ so i did
 - <role rolename="manager-script"/>
 - <user username="deployer" password="deployer" roles="manager-script"/>
 
+# or 
+
+<role rolename="tomcat"/>
+  <role rolename="manager-gui"/>
+  <role rolename="admin-gui"/>
+  <role rolename="manager-script"/>
+  <user username="admin" password="admin" roles="tomcat,manager-gui,admin-gui,manager-script"/>
 - save esc :wq
 - manager app sign in with tomcat and s3cret you are signed in
 
