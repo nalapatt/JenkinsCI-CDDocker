@@ -133,6 +133,8 @@ and change passwd
 
 press yes enter password welcome123 key will be added
   
+# try to ssh to see if you have connection
+even ssh deploy@172.31.23.115 should work
 ssh -i id_rsa deploy@172.31.23.115 ( to see if you can log in to the server change it your deploy nodes pvt ip address)
 ssh -i id_rsa tomcat@172.31.23.115 ( to see if you can log in to the server change it your tomcat nodes pvt ip address)
 yeah if you did !!
@@ -147,7 +149,6 @@ sudo whoami
 enter the password
 sudo yum update
 sudo amazon-linux-extras install epel
-//yum install epel-release
 sudo yum install ansible
 sudo vi /etc/ansible/hosts
 add hosts
@@ -158,7 +159,7 @@ add hosts
 [worker]
 172.31.19.177 ansible_pass=worker123 ansible_user=worker
 
-# git clone
+# git install and clone
 sudo yum install git 
 git init
 git clone https://github.com/nalapatt/ansible-k8s-setup.git
@@ -179,7 +180,7 @@ change and insert the path
 inventory : pwd/hosts
 esc :wq
 
-
+# check ansible lists and connection
 ansible master --list 
 ansible worker --list 
 ansible all --list 
@@ -191,6 +192,7 @@ sudo passwd root
 change the password for root the same as master and worker
 so will work for all
 
+# change the files so that it works on your system
 ll - shows all the files
 vi k8s-pkg.yml 
 remove the firewall disable
@@ -199,7 +201,7 @@ ansible-playbook k8s-pkg.yml --syntax-check
 ansible-playbook k8s-pkg.yml  --extra-vars "ansible_sudo_pass=ansible123" ( set all three passwords to this)
 if done YEAH!!!
 
-# go into the respective terminals and in root
+# go into the respective terminals and in root add user to docker group
 
 sudo usermod -aG docker master
 sudo usermod -aG docker worker
@@ -214,6 +216,7 @@ then
 ansible-playbook k8s-master.yml --extra-vars "ansible_sudo_pass=ansible123" 
 if alright YEAAAAH!!!
 
+# check if master is configured
 kubectl get nodes (should see the master)
 if error (localhost:8080 refused connection) then do this is root
 
@@ -222,20 +225,19 @@ mkdir -p $HOME/.kube
   sudo chown $(id -u):$(id -g) $HOME/.kube/config
 - y to overwrite config
 
-
+# get the join command
 edit the k8s-workers.yaml
 change the hosts to master and ip address in hostsvars[]
 ansible-playbook k8s-workers.yaml --extra-vars "ansible_sudo_pass=ansible123" 
 if this is done 
 
-
-
+# check the cluster nodes
 kubectl get nodes
 should show all the nodes
 
 # # YEAH YOU HAVE DONE creating the kubernetes cluster
 
-# now install jdk and jenkins
+# now install jdk and jenkins on the master
 # jdk
 sudo yum update
 su -c "yum install java-1.8.0-openjdk"
@@ -300,10 +302,11 @@ su - tomcat
 vi /etc/hosts
 [tomcat]
 172.31.23.115
-
+# copy the public key to tomcat user
 cd .ssh from the ansible controller
 ssh-copy-id -i id_rsa.pub tomcat@172.31.5.18
 
+# check and change configurations for the tomcat UI
 go to the tomcat server UI
 tomcat 8 tar.gz right click copy link address ( https://downloads.apache.org/tomcat/tomcat-8/v8.5.66/bin/apache-tomcat-8.5.66.tar.gz)
 wget https://downloads.apache.org/tomcat/tomcat-8/v8.5.66/bin/apache-tomcat-8.5.66.tar.gz
